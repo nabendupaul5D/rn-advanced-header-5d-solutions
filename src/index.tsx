@@ -1,25 +1,100 @@
 import * as React from 'react'
-import { Button, StyleSheet, Text } from 'react-native'
-import Animated from 'react-native-reanimated'
+import { Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native'
 
-export const addOne = (input: number) => input + 1
+import { HeaderProps } from './types'
 
-export const Counter = () => {
-  const [count, setCount] = React.useState(0)
+export const Header: React.FunctionComponent<HeaderProps> = ({
+  label = 'Header Title',
 
+  navigationType = 'DRAWER',
+  onBackPress,
+  // isCloseNavigation,
+}) => {
+  // const navigation = useNavigation()
+
+  const MenuIconButton: React.FC = () => {
+    // const onPress = () => navigation.dispatch(DrawerActions.toggleDrawer())
+    return (
+      // <Ripple onPress={onPress}>
+      //   <IconView name={'hamburger_menu'} />
+      // </Ripple>
+      <Pressable>
+        <Text>Menu</Text>
+      </Pressable>
+    )
+  }
+
+  const BackIconContainer: React.FC = () => {
+    // const onPress = () => {
+    //   if (preventDefault) {
+    //     onBackPress?.()
+    //   } else {
+    //     navigation.goBack()
+    //   }
+    // }
+    return (
+      <Pressable onPress={onBackPress}>
+        <Text>Exit</Text>
+      </Pressable>
+    )
+  }
+  const LeftButtonContainer: React.FC = () => {
+    switch (navigationType) {
+      case 'DRAWER':
+        return <MenuIconButton />
+      default:
+        return <BackIconContainer />
+    }
+  }
+  const mainStyles: ViewStyle = { height: 60 }
   return (
-    <Animated.View style={styles.container}>
-      <Text>You pressed {count} times</Text>
-      <Button onPress={() => setCount(addOne(count))} title='Press Me' />
-    </Animated.View>
+    <View style={styles.main}>
+      <View style={[mainStyles]}>
+        {/* <StackItem
+          verticalAlign={'flex-start'}
+          childrenGap={10}
+          horizontal={RenderMainContainer ? true : false}
+          style={styles.container}>
+          <LeftButtonContainer />
+          {RenderMainContainer ? (
+            <RenderMainContainer />
+          ) : !hideLabel ? (
+            <TextView
+              animated
+              weight="bold"
+              variant={FontSizes.xlarge}
+              style={textAnimatedStyles}>
+              {label}
+            </TextView>
+          ) : null}
+        </StackItem> */}
+        <LeftButtonContainer />
+        <Text>{label}</Text>
+      </View>
+      {/* <View center style={styles.leftContainerStyles}>
+        {RenderLeftContainer ? <RenderLeftContainer /> : undefined}
+      </View> */}
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  main: {
+    flexDirection: 'row',
+  },
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 200,
+    position: 'absolute',
+    zIndex: 200,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    top: 0,
+  },
+  leftContainerStyles: {
+    position: 'absolute',
+    right: 20,
+    height: 60,
+  },
+  baseMainContainerStyle: {
+    height: 60,
   },
 })
